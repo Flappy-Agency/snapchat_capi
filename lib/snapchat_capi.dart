@@ -2,8 +2,8 @@ library snapchat_capi;
 
 import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
+import 'package:snapchat_capi/normalizer.dart';
 
 import 'event_type.dart';
 
@@ -144,8 +144,8 @@ class SnapchatCAPI {
 
   String _hashValue(String? value) {
     if (value == null || value.isEmpty) return '';
-    final normalizedValue = value.toLowerCase().trim();
-    return sha256.convert(normalizedValue.codeUnits).toString();
+    final normalizedValue = Normalizer.normalize(value);
+    return Normalizer.hash(normalizedValue);
   }
 
   void _print(String message) {
