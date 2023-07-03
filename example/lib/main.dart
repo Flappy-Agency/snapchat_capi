@@ -40,11 +40,13 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       SnapchatCAPI.instance.sendEvent(
         eventType: EventType.purchase,
-        emailAddress: 'thomas@flappy.tech',
-        phoneNumber: '+33642065625',
         price: '10.00',
         currency: 'EUR',
       );
+
+      SnapchatCAPI.instance.setUserEmail('thomas@flappy.tech');
+      SnapchatCAPI.instance.setUserPhoneNumber('+33642065625');
+
     } catch (error) {
       print('Error in example app: $error');
     }

@@ -15,8 +15,11 @@ class SnapchatCAPI {
   final String apiKey;
   final String appId;
   final String snapAppId;
-  String? advertisingId;
   final bool testMode;
+
+  String? advertisingId;
+  String? _userEmail;
+  String? _userPhoneNumber;
 
   SnapchatCAPI._internal({
     required this.apiKey,
@@ -49,18 +52,24 @@ class SnapchatCAPI {
     return _instance!;
   }
 
+  void setUserEmail(String? email) {
+    _userEmail = email;
+  }
+
+  void setUserPhoneNumber(String? phoneNumber) {
+    _userPhoneNumber = phoneNumber;
+  }
+
   Future<bool> sendEvent({
     required EventType eventType,
     String price = '',
     String currency = '',
-    String? emailAddress,
-    String? phoneNumber,
   }) async {
     try {
       final urlEnd = testMode ? '/validate' : '';
       final url = '$_apiBaseUrl$urlEnd';
 
-      final normalizedPhoneNumber = _normalizePhoneNumber(phoneNumber);
+      final normalizedPhoneNumber = _normalizePhoneNumber(_userPhoneNumber);
 
       final response = await http.post(
         Uri.parse(url),
@@ -71,7 +80,7 @@ class SnapchatCAPI {
           'timestamp': _currentTimeStamp.toString(),
           'event_type': eventType.value,
           'event_conversion_type': 'MOBILE_APP',
-          'hashed_email': _hashValue(emailAddress),
+          'hashed_email': _hashValue(_userEmail),
           'hashed_phone_number': _hashValue(normalizedPhoneNumber),
           'hashed_mobile_ad_id': _hashValue(advertisingId),
           'price': price,
