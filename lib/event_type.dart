@@ -1,5 +1,6 @@
 enum EventType {
-  purchase('PURCHASE');
+  purchase('PURCHASE'),
+  signUp('SIGN_UP');
 
   final String value;
 
